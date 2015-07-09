@@ -1,4 +1,4 @@
-#!usr/bin/env python
+#!/usr/bin/env python
 ################################################
 # SpiderNet 
 #  By Wandering-Nomad (@wand3ringn0mad)
@@ -15,16 +15,26 @@
 import paramiko
 import interactive
 import socket
+import select
 import os
+try:
+    import SocketServer
+except ImportError:
+    import socketserver as SocketServer
+
+class ForwardServer (SocketServer.ThreadingTCPServer):
+		daemon_threads = True
+		alow_reuse_address = True
 
 class server(object):
-	def __init__(self, hostname, port, username, password):
+	def __init__(self, hostname, port, username, password, local_tunport):
 		self.active = False
 		self.hostname = hostname
 		self.port = port
 		self.username = username
 		self.password = password
 		self.connection_handle = ""
+		self.local_tunport = local_tunport
 
 	def details(self):
 		print "Host: %s:%s (%s/%s)" % (self.hostname, self.port, self.username, self.password)
@@ -138,15 +148,46 @@ class server(object):
 		self.active = False
 		print "[x] %s server shutdown" % self.hostname
 
+	def establish_tunnel(self):
+		if not self.active:
+			print "[x] %s Server Not Active" % self.hostname
+			return 1
+		stdout_data = []
+		stderr_data = []
+		class Handler(SocketServer.BaseRequestHandler):
+				def handle(self):
+					try:
+							channel = self.ssh_transport.open_channel('direct-tcpip', (self.hostname, self.port), self.request.getpeername())
+					except Exception as error:
+							print "[ERROR]: Incoming request to %s:%d failed: %s" % (self.hostname, self.port, repr(e))
+							return 1
+					if channel is None:
+							print "[ERROR]: Incoming request to %s:%d was rejected by the SSH server." %(self.hostname, self.port)
+							return 1
+					print "[x] Tunnel established: %r -> %r -> %r" %(self.request.getpeername(), chan.getpeername(), (self.hostname, self.port))
 
+					while True:
+						r, w, x = select.select([self.request, channel], [], [])
+						if self.request in r:
+							data = self.request.recv(1024)
+							if len(data) == 0:
+								break
+							channel.send(data)
+						if channel in r:
+							data = channel.recv(1024)
+							if len(data) == 0:
+								break
+							self.request.send(data)
+					peername = self.request.getpeername()
+					channel.close()
+					self.request.close()
+					print "[x] Tunnel closed: %r" % peername
 
-
-
-
-
-
-
-
-
-
+	#def forward_tunnel(self.local_tunport, self.hostname, self.port, transport):
+	def forward_tunnel(self, transport):
+		class SubHanler(Handler):
+			self.hostname = hostname
+			self.port = port
+			ssh_transport = transport
+		ForwardServer(('', self.local_tunport), SubHander).serve_forever()
 
