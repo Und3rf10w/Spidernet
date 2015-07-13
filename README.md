@@ -3,6 +3,8 @@ Proof of Concept of SSH Botnet C&C Using Python
 Original Concept:
 http://raidersec.blogspot.com/2013/07/building-ssh-botnet-c-using-python-and.html
 
+ssh-tunnel modifications added by @Und3rf10w
+
 This tool is meant for academic use only.  It is not meant for use on systems the operator does not have consent to operate on.  The author of this code takes no responsibility for its use.  Please do not use this system publicly, unless you contact the author first.
 
       _________      .__    .___                          __   
@@ -21,10 +23,12 @@ Usage: python spidernet.py
     [0] Connect Hosts
     [1] Update Hosts
     [2] List Hosts
-    [3] Host Details
-    [4] Run Command
-    [5] Open Shell
-    [6] Exit
+    [3] List Tunnels
+    [4] Host Details
+    [5] Run Command
+    [6] Open Shell
+    [7] Establish SSH Tunnel
+    [8] Exit
     #> 0
     ----------Active Hosts-------------
     Host: 192.168.1.254:22 (root/password)
@@ -33,10 +37,12 @@ Usage: python spidernet.py
     [0] Connect Hosts
     [1] Update Hosts
     [2] List Hosts
-    [3] Host Details
-    [4] Run Command
-    [5] Open Shell
-    [6] Exit
+    [3] List Tunnels
+    [4] Host Details
+    [5] Run Command
+    [6] Open Shell
+    [7] Establish SSH Tunnel
+    [8] Exit
     #> 3
     -----------------------------------
     ----------Hosts Details------------
@@ -51,10 +57,12 @@ Usage: python spidernet.py
     [0] Connect Hosts
     [1] Update Hosts
     [2] List Hosts
-    [3] Host Details
-    [4] Run Command
-    [5] Open Shell
-    [6] Exit
+    [3] List Tunnels
+    [4] Host Details
+    [5] Run Command
+    [6] Open Shell
+    [7] Establish SSH Tunnel
+    [8] Exit
     #> 4
     -----------------------------------
     Command: uname -a
@@ -63,8 +71,10 @@ Usage: python spidernet.py
     [0] Connect Hosts
     [1] Update Hosts
     [2] List Hosts
-    [3] Host Details
-    [4] Run Command
-    [5] Open Shell
-    [6] Exit
+    [3] List Tunnels
+    [4] Host Details
+    [5] Run Command
+    [6] Open Shell
+    [7] Establish SSH Tunnel
+    [8] Exit
     #> 
