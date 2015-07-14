@@ -20,7 +20,7 @@ from lib.server import *
 
 active_hosts = []
 active_tunnels = []
-local_tunport = "61322"
+CONST_LOCAL_TUNPORT = "61322"
 
 def start_spidernet():
 	while True:
