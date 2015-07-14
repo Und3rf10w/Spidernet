@@ -27,7 +27,7 @@ class ForwardServer (SocketServer.ThreadingTCPServer):
 		alow_reuse_address = True
 
 class server(object):
-	def __init__(self, hostname, port, username, password, local_tunport):
+	def __init__(self, hostname, port, username, password, local_tunport=CONST_LOCAL_TUNPORT):
 		self.active = False
 		self.hostname = hostname
 		self.port = port
